@@ -1,0 +1,7 @@
+/** @format */
+
+@import url('https://fonts.cdnfonts.com/css/sf-distant-galaxy');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
