@@ -11,12 +11,14 @@ export default {
 				xs: '475px',
 			},
 			fontFamily: {
-				sdg: ['SF Distant Galaxy', 'sans-serif'],
+				dhd: ['Deathshead Halftone', 'sans-serif'],
+				pcl: ['M PLUS Code Latin', 'sans-serif'],
 			},
 			colors: {
-				c1: '', // 60%
-				c2: '', // 30%
-				c3: '', // 10%
+				c1: '#323232', // 60%
+				c2: '#B4B4B8', // 30%
+				c3: '#C10000', // 10%
+				ct: '#EEEEEE', // text
 			},
 		},
 	},

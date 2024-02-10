@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App'
-import Home from './Home'
-import Store from './Store'
 import Error from './Error'
+import Home from './Home'
+import Library from './Library'
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
 		errorElement: <Error />,
 		children: [
 			{ index: true, element: <Home /> },
-			{ path: 'store', element: <Store /> },
+			{ path: 'library', element: <Library /> },
 		],
 	},
 ])
