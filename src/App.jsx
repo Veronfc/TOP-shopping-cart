@@ -1,14 +1,37 @@
 /** @format */
 
+import { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-import cart from './cart'
 
 function App() {
-	const current_cart = cart()
+	const [items, setItems] = useState([])
+
+	const total = () => {
+		function sum(total, item) {
+			return total + item.price * item.quantity
+		}
+
+		return items.reduce(sum, 0)
+	}
+
+	const add = item => {
+		setItems([...items, item])
+	}
+
+	const remove = id => {
+		const temp = items
+		let index = temp.findIndex(item => item.id == id)
+		temp.splice(index, 1)
+		setItems(items)
+	}
+
+	const clear = () => {
+		setItems([])
+	}
 
 	return (
 		<>
-			<header className='header-bg flex h-20 items-center justify-between bg-c1 px-6 tracking-widest text-ct'>
+			<header className='absolute top-0 flex h-20 w-screen items-center justify-between bg-c1 px-6 tracking-widest text-ct shadow-[0_-1rem_2rem_1rem_black]'>
 				<Link className='text-color-change font-dhd text-5xl' to='/'>
 					operATion overLord
 				</Link>
@@ -29,28 +52,32 @@ function App() {
 					</Link>
 					<button
 						className='material-symbols-outlined text-color-change text-3xl'
-						title='View shopping cart'
-						onClick={() => {
-							console.log(current_cart.items + ' ' + current_cart.total())
-							current_cart.update('b2', 10)
-							console.log(current_cart.items + ' ' + current_cart.total())
-						}}>
+						title='View shopping cart'>
 						shopping_cart
 					</button>
 				</nav>
 			</header>
-			<Outlet />
-			<footer className='absolute bottom-0 flex h-12 w-screen items-center justify-between bg-c1 px-4 font-pcl tracking-widest text-ct'>
+			<Outlet context={{ items, add, remove, clear, total }}/>
+			<footer className='absolute bottom-0 flex h-12 w-screen items-center justify-between bg-c1 p-1 px-6 font-fin tracking-widest text-ct shadow-[0_1rem_2rem_1rem_black]'>
 				<p>
 					Developed by{' '}
 					<a
 						href='https://github.com/Veronfc'
 						target='_blank'
-						className='text-color-change font-dhd text-3xl hover:underline'>
+						className='text-color-change font-dhd text-3xl'>
 						veronfc
 					</a>
 				</p>
-				<p>Add RAWG API attribution</p>
+				<p>
+					Integrating the{' '}
+					<a
+						href='https://rawg.io/'
+						target='_blank'
+						className='text-color-change font-dhd text-3xl'>
+						RAWG
+					</a>{' '}
+					API
+				</p>
 			</footer>
 		</>
 	)

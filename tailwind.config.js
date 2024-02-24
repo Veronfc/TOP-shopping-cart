@@ -13,6 +13,7 @@ export default {
 			fontFamily: {
 				dhd: ['Deathshead Halftone', 'sans-serif'],
 				pcl: ['M PLUS Code Latin', 'sans-serif'],
+				fin: ['Finlandica', 'sans-serif'],
 			},
 			colors: {
 				c1: '#323232', // 60%

@@ -1,10 +1,8 @@
 /** @format */
 
-import { Link } from 'react-router-dom'
-
 function Home() {
 	return (
-		<main className='grid h-[calc(100vh-8rem)] w-screen place-items-center bg-c2'></main>
+		<main className='mb-12 mt-20 flex h-[calc(100vh-8rem)] w-screen flex-col items-center justify-start gap-2 bg-c2 p-4'></main>
 	)
 }
 
