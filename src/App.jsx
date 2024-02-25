@@ -5,7 +5,7 @@ import { Link, Outlet } from 'react-router-dom'
 
 function App() {
 	const [items, setItems] = useState([])
-	const [cart, setCart] = useState(true)
+	const [cart, setCart] = useState(false)
 
 	useEffect(() => {
 		console.log(items)
@@ -40,14 +40,6 @@ function App() {
 					operATion overLord
 				</Link>
 				<nav className='font-pcl flex gap-4'>
-					<div className='flex place-items-center'>
-						<input className='-mr-8 h-8 rounded-lg bg-c1 px-2 text-c1 duration-300'></input>
-						<button
-							className='material-symbols-outlined text-color-change text-3xl'
-							title='Search catalogue'>
-							search
-						</button>
-					</div>
 					<Link
 						to='/library'
 						className='material-symbols-outlined text-color-change text-3xl'
@@ -55,30 +47,39 @@ function App() {
 						grid_view
 					</Link>
 					<button
-						className='material-symbols-outlined text-color-change text-3xl'
+						className='material-symbols-outlined text-color-change relative text-3xl'
 						title='View shopping cart'
 						onClick={() => {
 							cart ? setCart(false) : setCart(true)
 						}}>
 						shopping_cart
 					</button>
+					{items.length > 0 ? (
+						<label className='absolute right-4 top-5 z-30 rounded-full bg-c3 px-1 py-0 font-fin text-xs text-ct'>
+							{items.length}
+						</label>
+					) : (
+						''
+					)}
 				</nav>
 			</header>
 			<section
-				className='absolute right-0 top-20 z-10 grid max-h-[70%] min-h-min w-96 grid-rows-[1fr_3rem] overflow-hidden rounded-bl-3xl bg-c2 font-fin text-2xl shadow-[1rem_-1rem_2rem_1rem_black] duration-500'
+				className='absolute right-0 top-20 z-10 grid max-h-[50%] min-h-min w-96 grid-rows-[1fr_3rem] overflow-hidden rounded-bl-3xl bg-c2 font-fin text-2xl shadow-[1rem_-1rem_2rem_1rem_black] duration-500'
 				style={
-					cart
+					cart 
 						? { transform: 'translate(0, 0)' }
 						: { transform: 'translate(0, -150%)' }
 				}>
-				<div className='flex flex-col gap-2 px-4 py-2 text-xl'>
+				<div className='flex flex-col gap-2 overflow-y-auto px-4 py-2 text-xl'>
 					{items.map(item => {
 						return (
 							<div className='cart-text-color-change flex items-center justify-between duration-500'>
 								<p>{item.name}</p>
 								<button
 									title='Remove from cart'
-									onClick={() => remove(item.id)}>
+									onClick={() => {
+										remove(item.id)
+									}}>
 									&#x2716;
 								</button>
 							</div>
@@ -90,7 +91,10 @@ function App() {
 					<button
 						title='Clear shopping cart'
 						className='text-color-change'
-						onClick={() => clear()}>
+						onClick={() => {
+							clear()
+						}
+						}>
 						Clear
 					</button>
 				</div>
