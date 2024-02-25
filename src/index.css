@@ -1,7 +1,6 @@
 /** @format */
 
 @import url('https://fonts.cdnfonts.com/css/deathshead');
-@import url('https://fonts.cdnfonts.com/css/m-plus-code-latin');
 @import url('https://fonts.cdnfonts.com/css/finlandica');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
@@ -41,6 +40,21 @@ body {
 	-webkit-text-fill-color: transparent;
 	transition-duration: 0.4s;
 	background-image: linear-gradient(0deg, #cc1100, #cc1100 50%, #eeeeee 50%);
+	background-position: 0% 0%;
+	background-size: 100% 200%;
+
+	&:hover {
+		background-position: -100% -100%;
+	}
+}
+
+.cart-text-color-change {
+	-webkit-background-clip: text;
+	color: #323232;
+	-webkit-text-fill-color: transparent;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	background-image: linear-gradient(0deg, #cc1100, #cc1100 50%, #323232 50%);
 	background-position: 0% 0%;
 	background-size: 100% 200%;
 
