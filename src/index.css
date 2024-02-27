@@ -52,7 +52,7 @@ body {
 	-webkit-background-clip: text;
 	color: #323232;
 	-webkit-text-fill-color: transparent;
-	transition-duration: 0.4s;
+	transition-duration: .4s;
 	cursor: pointer;
 	background-image: linear-gradient(0deg, #cc1100, #cc1100 50%, #323232 50%);
 	background-position: 0% 0%;
@@ -63,11 +63,27 @@ body {
 	}
 }
 
+.button-color-change {
+  background-image: linear-gradient(to bottom, #cc1100 50%, transparent 50%);
+  background-size: 100% 200%;
+  background-position: bottom;
+  transition: .4s;
+}
+
+.button-color-change:hover {
+  background-position: top;
+	color: #b4b4b8;
+}
+
+svg.star-svg {
+	display: inline;
+}
+
 .image-fade {
 	mask-image: linear-gradient(
 		to right,
 		rgba(0, 0, 0, 1),
-		rgba(0, 0, 0, 0.2),
+		rgba(0, 0, 0, 0.25),
 		rgba(0, 0, 0, 0)
 	);
 }

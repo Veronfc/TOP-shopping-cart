@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useContext } from 'react'
 import { useOutletContext } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
+import moment from 'moment'
 
 function Library() {
 	const [data, setData] = useState([])
@@ -18,18 +20,12 @@ function Library() {
 		page: 1,
 	})
 
-	const [showOptions, setShowOptions] = useState(false)
-
 	const { items, add, remove, clear, total } = useOutletContext()
 
 	useEffect(() => {
 		fetchGenres()
 		fetchPlatforms()
 	}, [])
-
-	useEffect(() => {
-		console.log(options)
-	}, [options])
 
 	useEffect(() => {
 		fetchData()
@@ -94,24 +90,45 @@ function Library() {
 		}
 	}
 
-	//TODO: add card components to test cart logic
-
 	function Card({ game }) {
 		return (
 			<article
 				key={game.id}
-				className='relative flex min-h-64 w-full cursor-pointer items-center justify-between overflow-hidden rounded-bl-3xl rounded-tl-3xl bg-c1 font-fin tracking-widest text-white duration-300 hover:w-[calc(100%+2rem)] hover:rounded-none'>
+				className='relative flex min-h-64 w-full items-center justify-between overflow-hidden rounded bg-c1 font-fin tracking-widest text-white duration-300 hover:scale-[1.01] hover:shadow-[.5rem_.5rem_1rem_.1rem_black]'>
 				<img
 					src={game.background_image}
-					className='image-fade h-full min-w-[60%] object-cover'></img>
-				<p className='absolute bottom-0 w-3/5 p-4 text-5xl'>{game.name}</p>
-				<section className='absolute right-0 h-full min-w-[35%] p-4'>
+					className='image-fade h-full max-w-[60%] object-cover'></img>
+				<p className='absolute bottom-0 w-3/5 p-4 text-[2.5rem] leading-10'>
+					{game.name}
+				</p>
+				<section className='absolute right-0 grid h-full min-w-[40%] grid-rows-[1fr_1rem_3rem_2rem] content-center justify-stretch p-4'>
+					{/* //TODO: Add modal game details and screenshots */}
+					<div></div>
+					<p>Released: {moment(game.released, 'YYYY-MM-DD').format('DD MMM YYYY')}</p>
+					<div className='flex items-center justify-start'>
+						<p className='pt-1 pr-1'>Rating:</p>
+					<Rating
+						emptyColor='#b4b4b8'
+						fillColor='#323232'
+						initialValue={game.rating}
+						size={20}
+						iconsCount={5}
+						SVGstorkeWidth={1}
+						SVGstrokeColor='#b4b4b8'
+						allowFraction
+						readonly
+					/>
+					</div>
 					<button
 						onClick={() => {
-							add({ id: game.id, name: game.name, price: 1250.0 })
-						}}>
+							items.some(item => item.id === game.id)
+							? remove(game.id)
+							: add({ id: game.id, name: game.name, price: 1250.0 })
+						}}
+						className='duration-300 h-8 rounded bg-c2 text-xl text-c1 button-color-change'
+						style={items.some(item => item.id === game.id) ? {backgroundColor: '#cc1100', color: '#b4b4b8'} : {}}>
 						{items.some(item => item.id === game.id)
-							? 'In shopping cart'
+							? 'Remove from cart'
 							: 'Add to cart'}
 					</button>
 				</section>
@@ -120,32 +137,19 @@ function Library() {
 	}
 
 	return (
-		<main className='relative mb-12 mt-20 flex h-[calc(100vh-8rem)] w-screen flex-col items-center justify-start gap-4 overflow-y-auto overflow-x-hidden bg-c2 p-4'>
-			<section className='fixed grid gap-4 content-start left-0 top-20 z-10 rounded-br-3xl bg-c1 p-4 font-fin shadow-[-1rem_-1rem_2rem_1rem_black] duration-500' style={
-					showOptions
-						? { transform: 'translate(0, 0)' }
-						: { transform: 'translate(-100%, 0)' }
-				}>
-				<div className='relative grid'>
-				<p className='text-4xl justify-self-center text-ct'>Options</p>
-				<button className='absolute text-ct bg-c1 w-12 h-16 -top-4 -right-16 rounded-br-3xl text-3xl' title='View options' onClick={() => {showOptions ? setShowOptions(false) : setShowOptions(true)}}>&#x2B7E;</button>
-				</div>
-				{/* //TODO: move search to header
+		<div className='mb-12 mt-20 w-screen'>
+			<input
+				type='search'
+				name='search'
+				placeholder='Search...'
+				onInput={e => {
+					setOptions({ ...options, search: e.target.value })
+				}}
+				className='absolute right-40 top-6 z-20 w-32 rounded bg-c2 px-2 py-1 font-fin duration-500 placeholder:text-c1 focus:w-56'></input>
+			<section className='flex h-12 w-screen items-center justify-center bg-c1 font-fin'>
 				<div>
-					<label htmlFor='search' className='text-xl text-ct'>
-						Search
-					</label>
-					<input
-						type='search'
-						name='search'
-						onInput={e => {
-							setOptions({ ...options, search: e.target.value })
-						}}
-						className='rounded bg-c2 px-2 py-1'></input>
-				</div> */}
-				<div>
-					<label htmlFor='ordering' className='text-xl text-ct pr-4'>
-						Sort
+					<label htmlFor='ordering' className='pr-2 text-ct'>
+						Order by
 					</label>
 					<select
 						name='ordering'
@@ -157,10 +161,12 @@ function Library() {
 						<option value=''>Default</option>
 						<option value='name'>Name</option>
 						<option value='released'>Release date</option>
+						<option value='rating'>Rating</option>
+						<option value='metacritic'>Metacritic score</option>
 					</select>
 				</div>
 				<div>
-					<label htmlFor='platform' className='text-xl text-ct pr-4'>
+					<label htmlFor='platform' className='pl-8 pr-2 text-ct'>
 						Platform
 					</label>
 					<select
@@ -177,7 +183,7 @@ function Library() {
 					</select>
 				</div>
 				<div>
-					<label htmlFor='genre' className='text-xl text-ct pr-4'>
+					<label htmlFor='genre' className='pl-8 pr-2 text-ct'>
 						Genre
 					</label>
 					<select
@@ -194,16 +200,24 @@ function Library() {
 					</select>
 				</div>
 			</section>
-			{loading ? (
-				<p>loading...</p>
-			) : error ? (
-				<p>Error: {error}</p>
-			) : (
-				data.map(game => {
-					return <Card game={game} />
-				})
-			)}
-		</main>
+			<main className='relative grid h-[calc(100vh-11rem)] grid-cols-1 content-start justify-center gap-4 overflow-y-auto overflow-x-hidden bg-c2 p-4 lg:grid-cols-2 2xl:grid-cols-3'>
+				{loading ? (
+					//TODO: Add loading animation
+					<p>loading...</p>
+				) : error ? (
+					<p>Error: {error}</p>
+				) : (
+					data.map(game => {
+						return <Card game={game} />
+					})
+				)}
+			</main>
+
+			{/* TODO: Add pagination
+			<section className='absolute bottom-0 left-1/2 z-20 flex h-12 -translate-x-1/2 items-center justify-center bg-c1 text-ct'>
+				pagination
+			</section> */}
+		</div>
 	)
 }
 
