@@ -6,3 +6,4 @@
 > - Add pagination to library
 > - Add detailed game views
 > - Add loading animations
+> - Add checkout window
