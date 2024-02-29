@@ -1,5 +1,5 @@
 # Shopping cart project for TOP's React course
-> Live link: *coming soon*
+> Live link: [Operation Overlord](https://top-shopping-cart-lake.vercel.app/)
 ---
 > Todo
 > - Add more info and detail to home page
