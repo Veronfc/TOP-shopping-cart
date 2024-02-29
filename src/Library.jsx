@@ -31,7 +31,6 @@ function Library() {
 		fetchData()
 	}, [options])
 
-	//DESC: fetch api data
 	const fetchGenres = async () => {
 		try {
 			const response = await fetch(
@@ -69,7 +68,7 @@ function Library() {
 	const fetchData = async () => {
 		try {
 			const response = await fetch(
-				`https://api.rawg.io/api/games?key=e4b3b65720e64371972c8b9c24d94d4f&search=${options.search}&search_precise=true${options.platform === '' ? '' : `&parent_platforms=${options.platform}`}${options.genre === '' ? '' : `&genres=${options.genre}`}&ordering=${options.ordering}&page=${options.page}&page_size=40`,
+				`https://api.rawg.io/api/games?key=e4b3b65720e64371972c8b9c24d94d4f&search=${options.search}&search_precise=true${options.platform === '' ? '1,2,3,4,5,6,7,8' : `&parent_platforms=${options.platform}`}${options.genre === '' ? '' : `&genres=${options.genre}`}&ordering=${options.ordering}&page=${options.page}&dates=2000-01-01,${moment().format('YYYY-MM-DD')}&page_size=40`,
 				{
 					method: 'GET',
 					mode: 'cors',
@@ -90,7 +89,7 @@ function Library() {
 		}
 	}
 
-	function Card({ game }) {
+	function Card({ game, price }) {
 		return (
 			<article
 				key={game.id}
@@ -101,32 +100,45 @@ function Library() {
 				<p className='absolute bottom-0 w-3/5 p-4 text-[2.5rem] leading-10'>
 					{game.name}
 				</p>
-				<section className='absolute right-0 grid h-full min-w-[40%] grid-rows-[1fr_1rem_3rem_2rem] content-center justify-stretch p-4'>
-					{/* //TODO: Add modal game details and screenshots */}
+				<section className='absolute right-0 grid h-full min-w-[40%] grid-rows-[1fr_1rem_3rem_2.5rem_2rem] content-center justify-stretch p-4'>
+					{/* //TODO: Add view for game details and screenshots
+					//TODO: Add platforms to games */}
 					<div></div>
-					<p>Released: {moment(game.released, 'YYYY-MM-DD').format('DD MMM YYYY')}</p>
+					<p>
+						Released:{' '}
+						{moment(game.released, 'YYYY-MM-DD').format('DD MMM YYYY')}
+					</p>
 					<div className='flex items-center justify-start'>
-						<p className='pt-1 pr-1'>Rating:</p>
-					<Rating
-						emptyColor='#b4b4b8'
-						fillColor='#323232'
-						initialValue={game.rating}
-						size={20}
-						iconsCount={5}
-						SVGstorkeWidth={1}
-						SVGstrokeColor='#b4b4b8'
-						allowFraction
-						readonly
-					/>
+						<p className='pr-1 pt-1'>Rating:</p>
+						<Rating
+							emptyColor='#b4b4b8'
+							fillColor='#323232'
+							initialValue={game.rating}
+							size={20}
+							iconsCount={5}
+							SVGstorkeWidth={1}
+							SVGstrokeColor='#b4b4b8'
+							allowFraction
+							readonly
+						/>
 					</div>
+					<p className='text-3xl'>R {Math.floor(game.id * 10) / 1000}</p>
 					<button
 						onClick={() => {
 							items.some(item => item.id === game.id)
-							? remove(game.id)
-							: add({ id: game.id, name: game.name, price: 1250.0 })
+								? remove(game.id)
+								: add({
+										id: game.id,
+										name: game.name,
+										price: Math.floor(game.id * 10) / 1000,
+									})
 						}}
-						className='duration-300 h-8 rounded bg-c2 text-xl text-c1 button-color-change'
-						style={items.some(item => item.id === game.id) ? {backgroundColor: '#cc1100', color: '#b4b4b8'} : {}}>
+						className='button-color-change h-8 rounded bg-c2 text-xl text-c1 duration-300'
+						style={
+							items.some(item => item.id === game.id)
+								? { backgroundColor: '#cc1100', color: '#b4b4b8' }
+								: {}
+						}>
 						{items.some(item => item.id === game.id)
 							? 'Remove from cart'
 							: 'Add to cart'}
@@ -137,7 +149,7 @@ function Library() {
 	}
 
 	return (
-		<div className='mb-12 mt-20 w-screen'>
+		<div className='mt-20 w-screen'>
 			<input
 				type='search'
 				name='search'
@@ -146,7 +158,24 @@ function Library() {
 					setOptions({ ...options, search: e.target.value })
 				}}
 				className='absolute right-40 top-6 z-20 w-32 rounded bg-c2 px-2 py-1 font-fin duration-500 placeholder:text-c1 focus:w-56'></input>
-			<section className='flex h-12 w-screen items-center justify-center bg-c1 font-fin'>
+
+			<main className='relative grid h-[calc(100vh-8rem)] grid-cols-1 content-start justify-center gap-4 overflow-y-auto overflow-x-hidden bg-c2 p-4 lg:grid-cols-2 2xl:grid-cols-3'>
+				{loading ? (
+					//TODO: Add loading animation
+					<p className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+						loading...
+					</p>
+				) : error ? (
+					<p className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
+						Error: {error}
+					</p>
+				) : (
+					data.map(game => {
+						return <Card game={game} />
+					})
+				)}
+			</main>
+			<section className='absolute bottom-0 flex h-12 w-screen items-center justify-center bg-c1 font-fin shadow-[0_1rem_2rem_1rem_black]'>
 				<div>
 					<label htmlFor='ordering' className='pr-2 text-ct'>
 						Order by
@@ -160,9 +189,9 @@ function Library() {
 						className='cursor-pointer rounded bg-c2 px-2 py-1'>
 						<option value=''>Default</option>
 						<option value='name'>Name</option>
-						<option value='released'>Release date</option>
-						<option value='rating'>Rating</option>
-						<option value='metacritic'>Metacritic score</option>
+						<option value='-released'>Release date</option>
+						<option value='-rating'>Rating</option>
+						<option value='-metacritic'>Metacritic score</option>
 					</select>
 				</div>
 				<div>
@@ -200,19 +229,6 @@ function Library() {
 					</select>
 				</div>
 			</section>
-			<main className='relative grid h-[calc(100vh-11rem)] grid-cols-1 content-start justify-center gap-4 overflow-y-auto overflow-x-hidden bg-c2 p-4 lg:grid-cols-2 2xl:grid-cols-3'>
-				{loading ? (
-					//TODO: Add loading animation
-					<p>loading...</p>
-				) : error ? (
-					<p>Error: {error}</p>
-				) : (
-					data.map(game => {
-						return <Card game={game} />
-					})
-				)}
-			</main>
-
 			{/* TODO: Add pagination
 			<section className='absolute bottom-0 left-1/2 z-20 flex h-12 -translate-x-1/2 items-center justify-center bg-c1 text-ct'>
 				pagination

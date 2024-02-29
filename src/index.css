@@ -22,6 +22,8 @@ body {
 
 ::-webkit-scrollbar-thumb {
 	border: 0.25rem solid #323232;
+	border-top: 0;
+	border-bottom: 0;
 	background: #b4b4b8;
 }
 
@@ -52,7 +54,7 @@ body {
 	-webkit-background-clip: text;
 	color: #323232;
 	-webkit-text-fill-color: transparent;
-	transition-duration: .4s;
+	transition-duration: 0.4s;
 	cursor: pointer;
 	background-image: linear-gradient(0deg, #cc1100, #cc1100 50%, #323232 50%);
 	background-position: 0% 0%;
@@ -64,14 +66,14 @@ body {
 }
 
 .button-color-change {
-  background-image: linear-gradient(to bottom, #cc1100 50%, transparent 50%);
-  background-size: 100% 200%;
-  background-position: bottom;
-  transition: .4s;
+	transition: 0.4s;
+	background-image: linear-gradient(to bottom, #cc1100 50%, transparent 50%);
+	background-position: bottom;
+	background-size: 100% 200%;
 }
 
 .button-color-change:hover {
-  background-position: top;
+	background-position: top;
 	color: #b4b4b8;
 }
 
@@ -86,4 +88,8 @@ svg.star-svg {
 		rgba(0, 0, 0, 0.25),
 		rgba(0, 0, 0, 0)
 	);
+}
+
+section::-webkit-scrollbar {
+	display: none;
 }

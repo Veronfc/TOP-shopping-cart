@@ -15,7 +15,9 @@ function App() {
 
 	const remove = id => {
 		setItems(items.filter(item => item.id !== id))
-		if (items.length == 1) {setCart(false)}
+		if (items.length == 1) {
+			setCart(false)
+		}
 	}
 
 	const clear = () => {
@@ -25,7 +27,7 @@ function App() {
 
 	const total = () => {
 		function sum(total, item) {
-			return total + item.price
+			return total + Math.floor(item.price * 100) / 100
 		}
 
 		return items.reduce(sum, 0)
@@ -41,7 +43,7 @@ function App() {
 					<Link
 						to='/library'
 						className='material-symbols-outlined text-color-change text-3xl'
-						title='View catalogue'>
+						title='View library'>
 						grid_view
 					</Link>
 					<Link
@@ -115,27 +117,7 @@ function App() {
 				</div>
 			</section>
 			<Outlet context={{ items, add, remove, clear, total }} />
-			<footer className='absolute bottom-0 flex h-12 w-screen items-center justify-between bg-c1 p-1 px-6 font-fin tracking-widest text-ct shadow-[0_1rem_2rem_1rem_black]'>
-				<p>
-					Developed by{' '}
-					<a
-						href='https://github.com/Veronfc'
-						target='_blank'
-						className='text-color-change font-dhd text-3xl'>
-						veronfc
-					</a>
-				</p>
-				<p>
-					Integrating the{' '}
-					<a
-						href='https://rawg.io/'
-						target='_blank'
-						className='text-color-change font-dhd text-3xl'>
-						RAWG
-					</a>{' '}
-					API
-				</p>
-			</footer>
+			{/*  */}
 		</>
 	)
 }
